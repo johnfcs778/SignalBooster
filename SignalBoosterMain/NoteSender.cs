@@ -1,3 +1,4 @@
+// NoteSender sends structured note data to an external API endpoint.
 using System;
 using System.Net.Http;
 using System.Text;
@@ -6,13 +7,16 @@ using Newtonsoft.Json.Linq;
 
 namespace Synapse.SignalBoosterExample
 {
+    // Handles sending note payloads to an external API
     public class NoteSender
     {
-        private readonly ILogger _logger;
-        private readonly string _endpoint = "https://alert-api.com/DrExtract";
+        private readonly ILogger _logger; // Logger for info/debug
+        private readonly string _endpoint = "https://alert-api.com/DrExtract"; // API endpoint
 
+        // Constructor: injects logger
         public NoteSender(ILogger logger) => _logger = logger;
 
+        // Sends the payload to the API (skips if SKIP_API env var is set)
         public void Send(JObject payload)
         {
             // Skip API call in dev mode

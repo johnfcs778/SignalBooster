@@ -1,3 +1,4 @@
+// LlmNoteParser uses OpenAI's API to extract structured data from medical notes using an LLM.
 using OpenAI;
 using OpenAI.Managers;
 using OpenAI.ObjectModels;
@@ -13,10 +14,12 @@ using System;
 
 namespace Synapse.SignalBoosterExample
 {
+    // Implements IParser to extract structured info from medical notes using an LLM
     public class LlmNoteParser : IParser
     {
-        private readonly OpenAIService _openAi;
+        private readonly OpenAIService _openAi; // OpenAI API service instance
 
+        // Constructor: initializes OpenAI service with provided API key
         public LlmNoteParser(string apiKey)
         {
             _openAi = new OpenAIService(new OpenAiOptions
@@ -25,9 +28,11 @@ namespace Synapse.SignalBoosterExample
             });
         }
 
+        // Reads a file, extracts content, and parses it into structured JSON
         public async Task<JObject> ParseAndExtract(string filePath)
         {
             string content = File.ReadAllText(filePath);
+            // If file is already JSON, extract the 'data' field
             if (content.TrimStart().StartsWith("{"))
             {
                 content = JObject.Parse(content)["data"]?.ToString() ?? string.Empty;
@@ -35,6 +40,7 @@ namespace Synapse.SignalBoosterExample
             return await ParseAndExtractFromContent(content);
         }
 
+        // Parses raw note content into structured JSON using the LLM
         public async Task<JObject> ParseAndExtractFromContent(string content)
         {
             var jsonString = await ParseAsync(content);
@@ -44,10 +50,12 @@ namespace Synapse.SignalBoosterExample
             }
             catch (JsonReaderException ex)
             {
+                // If LLM output is not valid JSON, throw a clear error
                 throw new InvalidOperationException("Failed to parse LLM response as JSON:\n" + jsonString, ex);
             }
         }
 
+        // Calls OpenAI with retries and exponential backoff on rate limit errors
         private async Task<ChatCompletionCreateResponse> CallWithRetry(ChatCompletionCreateRequest request, int retries = 3)
         {
             for (int i = 0; i < retries; i++)
@@ -57,6 +65,7 @@ namespace Synapse.SignalBoosterExample
                     return response;
 
                 Console.WriteLine($"Retry {i + 1}/{retries} - Error: {response.Error?.Message}");
+                // Only retry on rate limit errors
                 if (response.HttpStatusCode != System.Net.HttpStatusCode.TooManyRequests)
                     break;
 
@@ -65,8 +74,10 @@ namespace Synapse.SignalBoosterExample
             throw new InvalidOperationException("OpenAI request failed after retries.");
         }
 
+        // Sends the note to the LLM and returns the extracted JSON string
         public async Task<string> ParseAsync(string note)
         {
+            // Prompt instructs the LLM to extract a specific JSON schema from the note
             var prompt = 
             "Extract the following structured JSON from the medical note below.\n\n" +
             "Return only a JSON object with this schema:\n" +

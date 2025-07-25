@@ -1,3 +1,4 @@
+// Program entry point for SignalBooster: parses and sends medical notes using LLM or regex parser.
 using System;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -8,9 +9,10 @@ namespace Synapse.SignalBoosterExample
 {
     class Program
     {
+        // Main entry: parses args, loads note, extracts data, sends to API
         static async Task<int> Main(string[] args)
         {
-            bool useLlm = args.Contains("--llm");
+            bool useLlm = args.Contains("--llm"); // Use LLM parser if flag present
             string source = args.FirstOrDefault(arg => arg.StartsWith("--source="))?.Split('=')[1] ?? "file";
             string path = args.FirstOrDefault(arg => arg.StartsWith("--path="))?.Split('=')[1] ?? "physician_note1.txt";
             string url = args.FirstOrDefault(arg => arg.StartsWith("--url="))?.Split('=')[1];
@@ -29,6 +31,7 @@ namespace Synapse.SignalBoosterExample
                 string content;
                 if (source == "api")
                 {
+                    // Load note content from URL if --source=api
                     if (string.IsNullOrWhiteSpace(url))
                         throw new ArgumentException("--url must be provided when --source=api");
 
@@ -37,12 +40,15 @@ namespace Synapse.SignalBoosterExample
                 }
                 else
                 {
+                    // Load note content from file (default)
                     content = System.IO.File.ReadAllText(path);
                 }
 
+                // Choose parser: LLM or regex-based
                 IParser parser = useLlm ? new LlmNoteParser(apiKey) : new NoteParser(logger);
                 var note = await parser.ParseAndExtractFromContent(content);
 
+                // Send extracted data to API
                 var sender = new NoteSender(logger);
                 sender.Send(note);
 
