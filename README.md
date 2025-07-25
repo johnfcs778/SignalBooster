@@ -107,6 +107,7 @@ If continuing development, I would focus on:
 
 ---
 
-## 📄 License
+## 🔨 Tools Used
 
-MIT License – free for personal or commercial use.
+- Cursor was the IDE used for development mostly for code completion and generation around regex and guided generation for rapid development
+- ChatGPT was used for troubleshooting build issues, etc. 
