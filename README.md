@@ -29,6 +29,7 @@ dotnet run -- --path=physician_note1.txt
 ```bash
 dotnet run -- --path=physician_note1.txt --llm
 ```
+Note: I wasn't able to fully test this because my api key was seemingly infinitely rate limited 
 
 ### Parse from API Endpoint (GET)
 ```bash
@@ -82,21 +83,25 @@ If continuing development, I would focus on:
 - Add tests for LLM fallback behavior and edge cases
 - Mock HTTP calls and OpenAI API for deterministic testability
 
-### 🧠 2. Enhanced NLP Capabilities
+### 🧰 2. More Rigid Parsing
+- Add a class strucutre for the parsed data, supporting many types of DME/qualifiers
+- Parse the data into these models which would have their own validators
+
+### 🧠 3. Enhanced NLP Capabilities
 - Use named entity recognition (NER) or a fine-tuned model for better entity extraction
 - Add more robust regex fallback for ambiguous cases
 
-### 🛠 3. Config File Support
+### 🛠 4. Config File Support
 - Allow loading settings (API keys, source preferences, etc.) from `appsettings.json` or environment-specific config
 
-### ☁️ 4. Deployment-Ready Enhancements
+### ☁️ 5. Deployment-Ready Enhancements
 - Add logging to file (e.g. `serilog`) for audit trail
 - Graceful retry logic for transient LLM or network failures
 
-### 📦 5. API Wrapper
+### 📦 6. API Wrapper
 - Expose the parser logic as a web API endpoint (ASP.NET Core) for integration with other systems
 
-### 🧩 6. Multi-format Support
+### 🧩 7. Multi-format Support
 - Add support for Word/PDF inputs (with OCR if needed)
 - Option to output in HL7/FHIR format for EHR integration
 
