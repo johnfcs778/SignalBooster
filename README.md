@@ -105,6 +105,9 @@ If continuing development, I would focus on:
 - Add support for Word/PDF inputs (with OCR if needed)
 - Option to output in HL7/FHIR format for EHR integration
 
+### 🥼 8. Naming
+- The name "Signal Booster" doesn't seem to make sense with what the project is doing, but left it for consistency
+
 ---
 
 ## 🔨 Tools Used
