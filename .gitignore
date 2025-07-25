@@ -1,0 +1,56 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# Rider / VS Code / Visual Studio
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Test results
+TestResults/
+*.coverage
+*.coveragexml
+*.vsp
+*.vspx
+*.vspscc
+
+# Logs
+*.log
+
+# Auto-generated files
+*.pdb
+*.dll
+*.exe
+*.json
+*.cache
+*.dbmdl
+
+# OS junk
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# NuGet stuff
+*.nupkg
+*.snupkg
+*.nuspec
+*.psmdcp
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# dotnet-specific cache
+*.nuget.props
+*.nuget.targets
+
+# Optional: Exclude secrets (if you have any)
+secrets.json
+.env
+
+# Optional: If you have user data/config files
+*.txt
