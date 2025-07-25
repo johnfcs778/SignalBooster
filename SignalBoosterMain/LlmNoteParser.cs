@@ -11,7 +11,6 @@ using System.IO;
 using Newtonsoft.Json;
 using System;
 
-
 namespace Synapse.SignalBoosterExample
 {
     public class LlmNoteParser : IParser
@@ -33,6 +32,11 @@ namespace Synapse.SignalBoosterExample
             {
                 content = JObject.Parse(content)["data"]?.ToString() ?? string.Empty;
             }
+            return await ParseAndExtractFromContent(content);
+        }
+
+        public async Task<JObject> ParseAndExtractFromContent(string content)
+        {
             var jsonString = await ParseAsync(content);
             try
             {
@@ -42,7 +46,6 @@ namespace Synapse.SignalBoosterExample
             {
                 throw new InvalidOperationException("Failed to parse LLM response as JSON:\n" + jsonString, ex);
             }
-
         }
 
         private async Task<ChatCompletionCreateResponse> CallWithRetry(ChatCompletionCreateRequest request, int retries = 3)
@@ -61,7 +64,6 @@ namespace Synapse.SignalBoosterExample
             }
             throw new InvalidOperationException("OpenAI request failed after retries.");
         }
-
 
         public async Task<string> ParseAsync(string note)
         {
